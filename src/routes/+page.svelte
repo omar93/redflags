@@ -1,34 +1,43 @@
 <script>
   import Card from "../components/Card.svelte"
+  import { perks } from "../lib/redflags.js"
 
-  let cardData = {
-    cardColor: 'red',
-    isGood: true,
-    cardText: 'bla bla',
-    duration: 500
+  let cards = []
+
+  perks.forEach(perk => {
+    let cardData = {
+      cardColor: 'red',
+      isGood: true,
+      cardText: perk,
+      duration: 500
+    }
+    cards.push(cardData)
+  })
+
+  let start = 0
+  let end = 3
+
+  let displayedCards = cards.slice(start, end)
+
+  const handleClick = () => {
+    start += 3
+    end += 3
+    displayedCards = cards.slice(start, end)
   }
-
-  let getin = false
-
-  setTimeout(() => {
-    getin = true
-  },500)
-
+  
+  console.log(displayedCards);
 </script>
 
 <div id="main--wrapper">
-
   <ul id="card--wrapper">
-    {#if getin}
-      <Card {...cardData}/>
-      <Card {...cardData}/>
-      <Card {...cardData}/>
-    {/if}
+    {#each displayedCards as card}
+      <Card {...card}/>
+    {/each}
   </ul>
 
   <div id="button--wrapper">
-    <img class="button" alt="red" src="/img/no.png"/>
-    <img class="button" alt="green" src="/img/yes.png"/>
+    <img class="button" on:click={handleClick} alt="red" src="/img/no.png"/>
+    <img class="button" on:click={handleClick} alt="green" src="/img/yes.png"/>
   </div>
 </div>
 

@@ -5,7 +5,7 @@
 </script>
 
 <div style="--theme-color: {cardColor}" id="main--wrapper" in:fly={{ x: 200, duration: 500 }}>
-  <p>
+  <p id="text">
     {cardText}
   </p>
 </div>
@@ -19,5 +19,9 @@
     margin: auto;
     background-color: var(--theme-cardColor);
     border-radius: 1em;
+    text-align: center;
+  }
+  #text {
+    font-size: 3em;
   }
 </style>
