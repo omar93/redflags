@@ -1,67 +1,123 @@
 <script>
   import Card from "../components/Card.svelte"
-  import { perks } from "../lib/redflags.js"
 
-  let cards = []
+  import { perks } from "../lib/perks.js"
+  import { redflags } from "../lib/redflags.js"
+  import { shuffleArray } from '../lib/shuffle.js'
 
-  perks.forEach(perk => {
-    let cardData = {
-      cardColor: 'red',
-      isGood: true,
-      cardText: perk,
-      duration: 500
+  let goodCards = shuffleArray(perks)
+  let badCards = shuffleArray(redflags)
+
+  let card1
+  let card2
+  let card3
+
+  let showCard1, showCard2, showCard3 = false
+
+  let dates = []
+  let gameLive = false
+
+  const setupBoard = () => {
+
+    if(gameLive) {
+      let first = goodCards.shift()
+      let second = goodCards.shift()
+      let third = badCards.shift()
+
+      let item = {
+        first,
+        second,
+        third
+      }
+
+      dates.push(item)
     }
-    cards.push(cardData)
-  })
+    
+    card1 = {
+      cardColor: 'green',
+      cardText: goodCards[0]
+    }
 
-  let start = 0
-  let end = 3
+    card2 = {
+      cardColor: 'green',
+      cardText: goodCards[1]
+    }
 
-  let displayedCards = cards.slice(start, end)
+    card3 = {
+      cardColor: 'red',
+      cardText: badCards[0]
+    }
 
-  const handleClick = () => {
-    start += 3
-    end += 3
-    displayedCards = cards.slice(start, end)
+    gameLive = true
+    
+    hideCards()
   }
+
+  const hideCards = () => {
+    showCard1 = false
+    showCard2 = false
+    showCard3 = false
+  }
+
+  setupBoard()
   
-  console.log(displayedCards);
 </script>
 
 <div id="main--wrapper">
+
   <ul id="card--wrapper">
-    {#each displayedCards as card}
-      <Card {...card}/>
-    {/each}
+    <Card {...card1} bind:showCard={showCard1}/>
+    <Card {...card2} bind:showCard={showCard2}/>
+    <Card {...card3} bind:showCard={showCard3}/>
   </ul>
 
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <div id="button--wrapper">
-    <img class="button" on:click={handleClick} alt="red" src="/img/no.png"/>
-    <img class="button" on:click={handleClick} alt="green" src="/img/yes.png"/>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <img id="no" class="button" on:click={setupBoard} alt="red" src="/img/no.png"/>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <img id="yes" class="button" on:click={setupBoard} alt="green" src="/img/yes.png"/>
   </div>
+  
 </div>
 
 <style>
   #main--wrapper {
-    overflow: hidden
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
   }
   ul {
-    height: 90vh;
-    border: 3px solid purple;
+    height: 75vh;
     padding: 0%;
     margin: 0%;
     display: flex;
     flex-direction: column;
-    background-color: yellow;
+    justify-content: space-evenly;
   }
   #button--wrapper {
-    margin-top: 20px;
+    height: 15vh;
+    width: 100%;
+    margin: auto;
     display:flex;
     justify-content: space-evenly;
   }
   .button {
     cursor: pointer;
     border: none;
-    width: 150px;
+    background-color:rgba(255, 255, 255, 0);
+    height: 90px;
+    width: 90px;
+  }
+  #yes {
+    background-image: url("/img/yes.png");
+    background-size: 100%
+
+  }
+  #no {
+    background-image: url("/img/no.png");
+    background-size: 100%
   }
 </style>
