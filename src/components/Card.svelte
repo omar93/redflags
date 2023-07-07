@@ -2,7 +2,7 @@
   import { fly } from 'svelte/transition'
 
   export let cardColor, cardText
-  export let showCard = false
+  export let showCard = true
 
   const handleClick = () => {
     showCard = true
@@ -12,7 +12,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="{ showCard ? 'faceUp' : 'faceDown' }" style="--theme-cardColor: {cardColor}" id="main--wrapper" on:click={handleClick}>
+<div in:fly={{ x: '100%', duration: 750 }} class="{ showCard ? 'faceUp' : 'faceDown' }" style="--theme-cardColor: {cardColor}" id="main--wrapper" on:click={handleClick}>
   {#if showCard}
     <p id="text">
       {cardText}
@@ -41,5 +41,6 @@
   }
   .faceDown {
     background-color: white;
+    background-image: url ("img/white.png");
   }
 </style>

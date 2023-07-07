@@ -12,12 +12,13 @@
   let card2
   let card3
 
-  let showCard1, showCard2, showCard3 = false
+  let showCards, showCard1, showCard2, showCard3 = false
 
   let dates = []
   let gameLive = false
 
   const setupBoard = () => {
+    showCards = false
 
     if(gameLive) {
       let first = goodCards.shift()
@@ -34,23 +35,26 @@
     }
     
     card1 = {
-      cardColor: 'green',
+      cardColor: 'img/white.png',
       cardText: goodCards[0]
     }
 
     card2 = {
-      cardColor: 'green',
+      cardColor: 'img/white.png',
       cardText: goodCards[1]
     }
 
     card3 = {
-      cardColor: 'red',
+      cardColor: 'img/red.png',
       cardText: badCards[0]
     }
 
     gameLive = true
     
     hideCards()
+    setTimeout(() => {
+      showCards = true
+    }, 1)
   }
 
   const hideCards = () => {
@@ -65,11 +69,13 @@
 
 <div id="main--wrapper">
 
+  {#if showCards}
   <ul id="card--wrapper">
     <Card {...card1} bind:showCard={showCard1}/>
     <Card {...card2} bind:showCard={showCard2}/>
     <Card {...card3} bind:showCard={showCard3}/>
   </ul>
+  {/if}
 
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <div id="button--wrapper">
@@ -103,6 +109,7 @@
     margin: auto;
     display:flex;
     justify-content: space-evenly;
+    position: sticky;
   }
   .button {
     cursor: pointer;
